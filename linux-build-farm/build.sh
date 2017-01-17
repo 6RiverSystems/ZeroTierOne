@@ -43,6 +43,14 @@ for distro in $subdirs; do
 		cd ..
 	fi
 
+	if [ -d armhf ]; then
+		cd armhf
+		mv ../../zt1-src.tar.gz .
+		docker build -t zt1-build-${distro}-armhf .
+		mv zt1-src.tar.gz ../..
+		cd ..
+	fi
+
 	rm -f *.deb *.rpm
 
 #	exit 0
@@ -54,12 +62,18 @@ for distro in $subdirs; do
 		if [ -d x86 ]; then
 			docker run --rm -v `pwd`:/artifacts --privileged -it zt1-build-${distro}-x86 /bin/bash -c 'cd /ZeroTierOne ; make redhat ; cd .. ; cp `find /root/rpmbuild -type f -name *.rpm` /artifacts ; ls -l /artifacts'
 		fi
+		if [ -d armhf ]; then
+			docker run --rm -v `pwd`:/artifacts --privileged -it zt1-build-${distro}-armhf /bin/bash -c 'cd /ZeroTierOne ; make redhat ; cd .. ; cp `find /root/rpmbuild -type f -name *.rpm` /artifacts ; ls -l /artifacts'
+		fi
 	else
 		if [ -d x64 ]; then
 			docker run --rm -v `pwd`:/artifacts --privileged -it zt1-build-${distro}-x64 /bin/bash -c 'cd /ZeroTierOne ; make debian ; cd .. ; cp *.deb /artifacts ; ls -l /artifacts'
 		fi
 		if [ -d x86 ]; then
 			docker run --rm -v `pwd`:/artifacts --privileged -it zt1-build-${distro}-x86 /bin/bash -c 'cd /ZeroTierOne ; make debian ; cd .. ; cp *.deb /artifacts ; ls -l /artifacts'
+		fi
+		if [ -d armhf ]; then
+			docker run --rm -v `pwd`:/artifacts --privileged -it zt1-build-${distro}-armhf /bin/bash -c 'cd /ZeroTierOne ; make debian ; cd .. ; cp *.deb /artifacts ; ls -l /artifacts'
 		fi
 	fi
 
