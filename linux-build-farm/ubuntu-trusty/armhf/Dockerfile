@@ -1,4 +1,4 @@
-FROM ioft/armhf-ubuntu:trusty
+FROM armv7/armhf-ubuntu:14.04
 MAINTAINER Adam Ierymenko <adam.ierymenko@zerotier.com>
 
 ADD qemu-arm-static /usr/bin/
